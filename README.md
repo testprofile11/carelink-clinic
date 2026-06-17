@@ -18,7 +18,9 @@ There is no login in this version. The portals are separated only by URL.
 - Patient appointment request form
 - Admin appointment status controls
 - Admin CSV export for Google Sheets
+- Admin daily reset button with confirmation prompt
 - Admin doctor directory editor for non-technical staff
+- Admin can add/delete doctors, including multiple doctors under the same specialty
 - Admin doctor availability editor
 - Max bookings per doctor per day
 - Required appointment-record consent

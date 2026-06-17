@@ -37,6 +37,7 @@
         </div>
         <div class="requests-panel">
           <button class="primary-button compact-action" id="exportAppointmentsButton" type="button">Export appointments for Google Sheets</button>
+          <button class="secondary-button compact-action" id="dailyResetButton" type="button">Daily reset appointments</button>
           <div id="appointmentList" class="request-list">
             <p class="empty-state">No appointments yet.</p>
           </div>
@@ -69,6 +70,8 @@
               <datalist id="specialtyOptions"></datalist>
             </label>
             <button class="primary-button" type="submit">Save doctor details</button>
+            <button class="secondary-button" id="addDoctorButton" type="button">Add new doctor</button>
+            <button class="secondary-button" id="deleteDoctorButton" type="button">Delete selected doctor</button>
             <button class="secondary-button" id="resetDoctorsButton" type="button">Reset default doctors</button>
             <p class="form-notice" id="doctorProfileNotice" role="status"></p>
           </form>

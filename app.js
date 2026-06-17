@@ -84,6 +84,7 @@ const daySelect = document.getElementById("daySelect");
 const slotSelect = document.getElementById("slotSelect");
 const appointmentList = document.getElementById("appointmentList");
 const exportAppointmentsButton = document.getElementById("exportAppointmentsButton");
+const dailyResetButton = document.getElementById("dailyResetButton");
 const doctorProfileForm = document.getElementById("doctorProfileForm");
 const doctorProfileSelect = document.getElementById("doctorProfileSelect");
 const doctorNameInput = document.getElementById("doctorNameInput");
@@ -92,6 +93,8 @@ const doctorSpecialtyInput = document.getElementById("doctorSpecialtyInput");
 const specialtyOptions = document.getElementById("specialtyOptions");
 const doctorDirectoryList = document.getElementById("doctorDirectoryList");
 const doctorProfileNotice = document.getElementById("doctorProfileNotice");
+const addDoctorButton = document.getElementById("addDoctorButton");
+const deleteDoctorButton = document.getElementById("deleteDoctorButton");
 const resetDoctorsButton = document.getElementById("resetDoctorsButton");
 const availabilityDoctorSelect = document.getElementById("availabilityDoctorSelect");
 const availabilityDaySelect = document.getElementById("availabilityDaySelect");
@@ -507,6 +510,22 @@ function exportAppointmentsCsv() {
   URL.revokeObjectURL(url);
 }
 
+function resetDailyAppointments() {
+  const shouldProceed = confirm(
+    "Daily reset will clear all saved appointment records from this browser. Export to Google Sheets first if you need a copy. Would you like to proceed?"
+  );
+
+  if (!shouldProceed) {
+    return;
+  }
+
+  state.appointments = [];
+  saveToStorage(storageKeys.appointments, state.appointments);
+  renderAppointments();
+  renderDoctors();
+  renderAvailabilityList();
+}
+
 function renderDoctorProfileTools() {
   if (!doctorProfileSelect) {
     return;
@@ -700,6 +719,76 @@ function handleDoctorProfileSubmit(event) {
   }
 }
 
+function createDoctorId(name) {
+  const base = name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "") || "doctor";
+  return `${base}-${Date.now()}`;
+}
+
+function handleAddDoctor() {
+  const name = prompt("Enter the new doctor's name:");
+  if (!name || !name.trim()) {
+    return;
+  }
+
+  const specialty = prompt("Enter the doctor's specialty:", "General Pediatrician");
+  if (!specialty || !specialty.trim()) {
+    return;
+  }
+
+  const doctor = {
+    id: createDoctorId(name.trim()),
+    name: name.trim(),
+    initials: makeInitials(name.trim()),
+    specialty: specialty.trim(),
+    dailyLimits: {},
+    availability: []
+  };
+
+  state.doctors.push(doctor);
+  saveToStorage(storageKeys.doctors, state.doctors);
+  renderDoctorProfileTools();
+  renderAvailabilityEditor();
+  renderDoctors();
+
+  if (doctorProfileSelect) {
+    doctorProfileSelect.value = doctor.id;
+    renderSelectedDoctorProfile();
+  }
+
+  if (doctorProfileNotice) {
+    doctorProfileNotice.textContent = "New doctor added. Set availability next.";
+  }
+}
+
+function handleDeleteDoctor() {
+  const doctor = getProfileEditorDoctor();
+  if (!doctor) {
+    return;
+  }
+
+  const hasAppointments = state.appointments.some((appointment) => appointment.doctorId === doctor.id);
+  const message = hasAppointments
+    ? `${doctor.name} has appointment records. Delete this doctor anyway? Existing appointment records will remain for reference.`
+    : `Delete ${doctor.name}?`;
+
+  if (!confirm(message)) {
+    return;
+  }
+
+  state.doctors = state.doctors.filter((item) => item.id !== doctor.id);
+  saveToStorage(storageKeys.doctors, state.doctors);
+  renderDoctorProfileTools();
+  renderAvailabilityEditor();
+  renderDoctors();
+
+  if (doctorProfileNotice) {
+    doctorProfileNotice.textContent = "Doctor deleted.";
+  }
+}
+
 function handleResetDoctors() {
   state.doctors = normalizeDoctors(JSON.parse(JSON.stringify(defaultDoctors)));
   saveToStorage(storageKeys.doctors, state.doctors);
@@ -749,8 +838,11 @@ if (procedureSelect) {
 document.getElementById("bookingForm")?.addEventListener("submit", handleBookingSubmit);
 appointmentList?.addEventListener("click", handleAppointmentAction);
 exportAppointmentsButton?.addEventListener("click", exportAppointmentsCsv);
+dailyResetButton?.addEventListener("click", resetDailyAppointments);
 doctorProfileSelect?.addEventListener("change", renderSelectedDoctorProfile);
 doctorProfileForm?.addEventListener("submit", handleDoctorProfileSubmit);
+addDoctorButton?.addEventListener("click", handleAddDoctor);
+deleteDoctorButton?.addEventListener("click", handleDeleteDoctor);
 resetDoctorsButton?.addEventListener("click", handleResetDoctors);
 availabilityDoctorSelect?.addEventListener("change", renderAvailabilityEditor);
 availabilityDaySelect?.addEventListener("change", renderAvailabilityEditor);
