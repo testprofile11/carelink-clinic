@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CareLink Multispecialty Clinic | Admin Portal</title>
+    <meta name="description" content="CareLink staff portal for appointments, doctors, and availability.">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body data-page="admin">
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="CareLink Multispecialty Clinic patient portal">
+        <img class="brand-logo" src="carelink.jpg" alt="CareLink Multispecialty Clinic" onerror="this.onerror=null;this.src='carelink-logo.svg';">
+      </a>
+      <nav aria-label="Main navigation">
+        <a href="index.html">Patient Portal</a>
+        <a href="#appointments">Appointments</a>
+        <a href="#doctors-admin">Doctors</a>
+        <a href="#availability-admin">Availability</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="section admin-hero">
+        <div class="section-heading">
+          <p class="eyebrow">Admin portal</p>
+          <h1>Manage appointments, doctor names, and schedules.</h1>
+          <p>This page is separate from the patient portal by URL only. No login is used in this fresh version.</p>
+        </div>
+      </section>
+
+      <section class="section dashboard" id="appointments">
+        <div class="section-heading">
+          <p class="eyebrow">Clinic action center</p>
+          <h2>Appointments</h2>
+          <p>Export appointment records as CSV, then open or import the file in Google Sheets.</p>
+        </div>
+        <div class="requests-panel">
+          <button class="primary-button compact-action" id="exportAppointmentsButton" type="button">Export appointments for Google Sheets</button>
+          <div id="appointmentList" class="request-list">
+            <p class="empty-state">No appointments yet.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section dashboard" id="doctors-admin">
+        <div class="section-heading">
+          <p class="eyebrow">Doctor directory</p>
+          <h2>Edit doctor names and specialties</h2>
+          <p>Staff can update the doctor/team name without editing code.</p>
+        </div>
+        <div class="dashboard-grid">
+          <form class="admin-panel form-panel" id="doctorProfileForm">
+            <label>
+              Select doctor
+              <select id="doctorProfileSelect" required></select>
+            </label>
+            <label>
+              Doctor or team name
+              <input id="doctorNameInput" type="text" placeholder="CareLink OB-GYN Team" required>
+            </label>
+            <label>
+              Initials
+              <input id="doctorInitialsInput" type="text" maxlength="3" placeholder="OG" required>
+            </label>
+            <label>
+              Specialty
+              <input id="doctorSpecialtyInput" list="specialtyOptions" type="text" placeholder="Obstetrician-Gynecologist" required>
+              <datalist id="specialtyOptions"></datalist>
+            </label>
+            <button class="primary-button" type="submit">Save doctor details</button>
+            <button class="secondary-button" id="resetDoctorsButton" type="button">Reset default doctors</button>
+            <p class="form-notice" id="doctorProfileNotice" role="status"></p>
+          </form>
+          <div class="admin-panel">
+            <h3>Current doctors</h3>
+            <div class="doctor-directory-list" id="doctorDirectoryList"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section dashboard" id="availability-admin">
+        <div class="section-heading">
+          <p class="eyebrow">Schedule setup</p>
+          <h2>Set availability and max bookings</h2>
+        </div>
+        <div class="dashboard-grid">
+          <form class="admin-panel form-panel" id="availabilityForm">
+            <label>
+              Doctor
+              <select id="availabilityDoctorSelect" required></select>
+            </label>
+            <label>
+              Day
+              <select id="availabilityDaySelect" required>
+                <option>Monday</option>
+                <option>Tuesday</option>
+                <option>Wednesday</option>
+                <option>Thursday</option>
+                <option>Friday</option>
+                <option>Saturday</option>
+                <option>Sunday</option>
+              </select>
+            </label>
+            <label>
+              Available times
+              <textarea id="availabilityTimes" rows="5" placeholder="9:00 AM&#10;10:30 AM&#10;2:00 PM"></textarea>
+            </label>
+            <label>
+              Max bookings for this day
+              <input id="dailyLimitInput" type="number" min="1" step="1" value="8" required>
+            </label>
+            <button class="primary-button" type="submit">Save availability</button>
+            <p class="form-notice" id="availabilityNotice" role="status"></p>
+          </form>
+          <div class="admin-panel">
+            <h3>Schedule summary</h3>
+            <div class="availability-list" id="availabilityList"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>CareLink Multispecialty Clinic staff portal</p>
+      <a href="index.html">Open patient portal</a>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
+

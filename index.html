@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CareLink Multispecialty Clinic | Patient Portal</title>
+    <meta name="description" content="Book appointments at CareLink Multispecialty Clinic.">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body data-page="patient">
+    <header class="site-header">
+      <a class="brand" href="#booking" aria-label="CareLink Multispecialty Clinic home">
+        <img class="brand-logo" src="carelink.jpg" alt="CareLink Multispecialty Clinic" onerror="this.onerror=null;this.src='carelink-logo.svg';">
+      </a>
+      <nav aria-label="Main navigation">
+        <a href="#doctors">Doctors</a>
+        <a href="#services">Procedures</a>
+        <a href="#booking">Book</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Patient portal</p>
+          <h1>Book a CareLink doctor by specialty and availability.</h1>
+          <p>Choose a procedure, see the matching doctors on duty, then request an appointment for an available day and time.</p>
+          <p class="contact-line">Contact us: <strong>0946 539 7697</strong> / <strong>0917 772 2821</strong> / <strong>0951 433 6574</strong></p>
+          <a class="primary-link" href="#booking">Start booking</a>
+        </div>
+        <div class="hero-panel" aria-label="Clinic availability summary">
+          <span class="status-dot"></span>
+          <strong>Available slots</strong>
+          <p><span id="availableCount">0</span> schedule entries open</p>
+        </div>
+      </section>
+
+      <section class="section" id="services">
+        <div class="section-heading">
+          <p class="eyebrow">Available procedures</p>
+          <h2>Click a procedure category to view doctors</h2>
+          <p>Each category filters the Doctors on Duty section and the booking doctor dropdown.</p>
+        </div>
+        <div class="services-grid" id="servicesGrid"></div>
+      </section>
+
+      <section class="section" id="doctors">
+        <div class="section-heading">
+          <p class="eyebrow">Doctors on duty</p>
+          <h2 id="doctorSectionTitle">All specialties</h2>
+        </div>
+        <div class="specialty-filter" id="specialtyFilter" aria-label="Doctor specialties"></div>
+        <div class="doctor-grid" id="doctorGrid" aria-live="polite"></div>
+      </section>
+
+      <section class="booking-shell section" id="booking">
+        <div class="booking-copy">
+          <p class="eyebrow">Appointment request</p>
+          <h2>Patient booking</h2>
+          <p>The day selector shows the remaining booking counter. Staff will review requests in the admin portal.</p>
+          <ol class="flow-list">
+            <li>Choose a procedure and doctor.</li>
+            <li>Select an available day and time.</li>
+            <li>Submit the request for staff review.</li>
+          </ol>
+        </div>
+
+        <form class="booking-form" id="bookingForm">
+          <div class="field-row">
+            <label>
+              Patient name
+              <input name="patientName" autocomplete="name" placeholder="Maria Santos" required>
+            </label>
+            <label>
+              Patient mobile
+              <input name="patientPhone" inputmode="tel" autocomplete="tel" placeholder="0917 123 4567" required>
+            </label>
+          </div>
+          <div class="field-row">
+            <label>
+              Procedure
+              <select name="procedure" id="procedureSelect" required></select>
+            </label>
+            <label>
+              Doctor
+              <select name="doctorId" id="doctorSelect" required></select>
+            </label>
+            <label>
+              Available day
+              <select name="day" id="daySelect" required></select>
+            </label>
+            <label>
+              Available time
+              <select name="slot" id="slotSelect" required></select>
+            </label>
+          </div>
+          <label>
+            Reason for visit
+            <textarea name="reason" rows="4" placeholder="Briefly describe the concern" required></textarea>
+          </label>
+          <div class="privacy-box">
+            <h3>Privacy and consent</h3>
+            <p>
+              CareLink will collect and use your details only to process your appointment request,
+              contact you about clinic services, keep appointment records, and support clinic operations.
+            </p>
+            <label class="check-field">
+              <input name="recordsConsent" type="checkbox" required>
+              <span>I agree that CareLink may collect and store my details for appointment records and clinic follow-up.</span>
+            </label>
+            <label class="check-field">
+              <input name="promoConsent" type="checkbox">
+              <span>I agree to receive future clinic promotions, announcements, and health reminders. This is optional.</span>
+            </label>
+          </div>
+          <button class="primary-button" type="submit">Submit appointment request</button>
+          <p class="form-notice" id="bookingNotice" role="status"></p>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>CareLink Multispecialty Clinic, Dimaano Commercial Bldg., G. Recto St., Poblacion D. Rosario, Batangas</p>
+      <a href="admin.html">Staff portal</a>
+    </footer>
+
+    <template id="doctorCardTemplate">
+      <article class="doctor-card">
+        <div class="avatar" aria-hidden="true"></div>
+        <div>
+          <h3></h3>
+          <p class="specialty"></p>
+          <p class="doctor-meta"></p>
+        </div>
+      </article>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
+
